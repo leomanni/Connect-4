@@ -1,6 +1,6 @@
-% Mossa PLAYER 2
+% Mossa PLAYER value (PC)
 
- function grid = action2(a,grid) %passo l'azione e la grid
+function grid = action(a,grid,value) %passo l'azione e la grid
     ROWS = size(grid,1);
     COLUMNS = size(grid,2);
     if grid(1,a)~=0 % controllo se la colonna è full
@@ -9,7 +9,7 @@
     else %posso impilare pedine
         for i=ROWS:-1:1
              if grid(i,a)==0
-                 grid(i,a)= 2;
+                 grid(i,a)= value;
                  break
              else
 

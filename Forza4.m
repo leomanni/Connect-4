@@ -6,55 +6,58 @@ clc
 
 
 
-global ROWS   COLUMNS
-ROWS = 4;
-COLUMNS = 4;
-win = 0;
-lose = 0;
-valid_id=[];
-grid = zeros(ROWS, COLUMNS);
-actions = 1:COLUMNS;
-S = 3^(ROWS*COLUMNS);
-valid_AS=[]; %contiene tutti gli id validi associati agli AFTER STATES
+rows = 6;
+columns = 7;
 
-% k=[0,0,0,0,0,0,0;
-%    0,0,0,0,0,0,0;
-%    0,0,0,0,0,0,0;
-%    0,0,0,0,0,0,0;
-%    0,0,0,0,0,0,0;
-%    0,0,0,0,0,0,0] ;   
+grid = zeros(rows, columns);
+actions = 1:columns;
+S = 0
+S_array=[]; %contiene tutti gli id validi associati agli AFTER STATES
 
-% k=[0,0,0,0;
-%    0,0,0,0;
-%    0,0,0,0;
-%    0,0,0,0]; 
-% 
-% k1= action1(3,k);
-% k2=action2(3,k1)
-% id=grid2id(k2)
-% l= id2grid(id)
 
-%%
+%% Allocazione stati
 
-%vettore di indica per riga
-%k_res=fliplr((id2grid(id))); %matrice da conversione
-%k_res=id2grid(id);
+id = grid2id(grid);
+S_array = [S_array; id];
+i = 1;
+% for i = 1:7 (a monte)
+
+while (i <=length(S_array))
+    grid_1 = id2grid(S_array(i));
+
+    for j = 1:7
+        % controllo sulla possibilità di giocare mossa j
+        grid_2 = action(j,grid_1,2);
+        id_temp = grid2id(grid_2);
+        if find(S_array = id) == 0
+            S_array = [S_array; id_temp]; %#ok<AGROW>
+        end
+    end
+    i = i+1;
+end
+
+% for i=1:7
+%   se colonna libera, gioca mossa i
+%       aggiungi A_S i-esimo a S_array in coda SE NON ESISTE
+%           se aggiunto stato, aggiungi 0 (not visited) in coda a S_visited
+% dopo il for, metti lo stato corrente con S_visited = 1
+
 
 %% RIDUZIONE STATI
 for id=0:S-1
     grid = id2grid(id);
     if (checkone(grid) == checktwo(grid))
-        valid_AS=[valid_AS; id];
+        S_array=[S_array; id];
     end
 end
 
-num_AS=length(valid_AS);
- 
+num_AS=length(S_array);
+
 %% SAVE
 
 %save data.mat valid_AS_id
-%%   
-    
+%%
+
 
 
 %cc= fliplr(id2grid(id(1))); %flippo il vettore
@@ -69,8 +72,8 @@ vect_action(grid);
 % P2= input ('Inserisci mossa P2: ');
 % grid=action1(PC,grid);
 % grid=action2(P2,grid);
- %win=checkwin(k);
- %lose= checklose(k);
+%win=checkwin(k);
+%lose= checklose(k);
 % grid
 
 %grid;
@@ -80,11 +83,10 @@ vect_action(grid);
 %    0,0,2,0,0,0,0;
 %    0,0,2,0,0,0,0;
 %    0,0,0,0,0,0,0]
-   
-   
+
+
 % w=checkwin(k)
 % l=checklose(k)
- 
 
 
 
@@ -103,63 +105,64 @@ vect_action(grid);
 
 
 
-%% METODI 
 
-     %numOccur = sum(arrayfun(@(x) x == 1,grid(i,:))); %conto il numero di 1 nell'array riga, se sono 4 allora controllo se sono consecutivi
-     %if numOccur >= 4  %se ci sono almeno 4 1 controllo senno skippo   
+%% METODI
 
- 
- %Conto il numero di 0 in griglia
- function zero= checkzero(grid)
- zero = 0;
-    for i=1:size(grid,1)
-        for j=1:size(grid,2)
-            if grid(i,j) == 0
-                zero = zero+1;
-            end
+%numOccur = sum(arrayfun(@(x) x == 1,grid(i,:))); %conto il numero di 1 nell'array riga, se sono 4 allora controllo se sono consecutivi
+%if numOccur >= 4  %se ci sono almeno 4 1 controllo senno skippo
+
+
+%Conto il numero di 0 in griglia
+function zero= checkzero(grid)
+zero = 0;
+for i=1:size(grid,1)
+    for j=1:size(grid,2)
+        if grid(i,j) == 0
+            zero = zero+1;
         end
     end
- end
- 
-  %Conto il numero di 1 in griglia
- function one= checkone(grid)
- one = 0;
-    for i=1:size(grid,1)
-        for j=1:size(grid,2)
-            if grid(i,j) == 1
-                one = one+1;
-            end
+end
+end
+
+%Conto il numero di 1 in griglia
+function one= checkone(grid)
+one = 0;
+for i=1:size(grid,1)
+    for j=1:size(grid,2)
+        if grid(i,j) == 1
+            one = one+1;
         end
     end
- end
- 
- %Conto il numero di 2 in griglia
- function two= checktwo(grid)
- two = 0;
-    for i=1:size(grid,1)
-        for j=1:size(grid,2)
-            if grid(i,j) == 2
-                two = two+1;
-            end
+end
+end
+
+%Conto il numero di 2 in griglia
+function two= checktwo(grid)
+two = 0;
+for i=1:size(grid,1)
+    for j=1:size(grid,2)
+        if grid(i,j) == 2
+            two = two+1;
         end
     end
- end
- 
- %Calcolo la probabilità di fare una mossa
- function vect_action = vect_action(grid)
-    vect_action =zeros(1,size(grid,2));
-    top_grid = grid(1,:);
-    for i= 1:size(grid,2)
-        if top_grid(i) == 0
-            vect_action(i) = 1;
-        end
+end
+end
+
+%Calcolo la probabilità di fare una mossa
+function vect_action = vect_action(grid)
+vect_action =zeros(1,size(grid,2));
+top_grid = grid(1,:);
+for i= 1:size(grid,2)
+    if top_grid(i) == 0
+        vect_action(i) = 1;
     end
- end
- 
-%  
-%  
- 
-%  
+end
+end
+
+%
+%
+
+%
 
 
 
@@ -199,5 +202,5 @@ vect_action(grid);
 %         end
 %     end
 %     grid=fliplr(grid);
-%     
+%
 %  end
