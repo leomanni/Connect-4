@@ -1,8 +1,8 @@
-% Mossa PLAYER value (PC)
+% Mossa PLAYER value 
 
-function grid = action(a,grid,value) %passo l'azione e la grid
+function grid = action(a,grid,value) %passo azione, grid, valore giocatore 
     ROWS = size(grid,1);
-    COLUMNS = size(grid,2);
+   %COLUMNS = size(grid,2);
     if grid(1,a)~=0 % controllo se la colonna è full
         %mossa non fattibile
         fprintf('ERRORE: selezionare altra mossa! ')

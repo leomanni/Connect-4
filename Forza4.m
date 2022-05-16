@@ -11,8 +11,61 @@ columns = 7;
 
 grid = zeros(rows, columns);
 actions = 1:columns;
-S = 0
+S = 0;
 S_array=[]; %contiene tutti gli id validi associati agli AFTER STATES
+
+AS = [];
+
+%%
+simulazioni = 1000;
+AS= [AS;0];
+i=1;
+while i<=simulazioni
+    grid = zeros(rows, columns); %parto da grid vuota (Già in AS)
+
+    while checkzero(grid)~=0 %INIZIO PARTITA RANDOM
+        %a=randi(size(actions,2)); %mossa random
+        grid = random_action(grid,1); % mossa PLAYER 1 random (Non è un AS)
+        grid = random_action(grid,2); % mossa PLAYER 2 random (E' UN AS)
+        id_AS = grid2id(grid); %converto in id
+        if (ismember(id_AS, AS) == 0)
+            AS = [AS;id_AS]; %id non presente, quindi aggiungo
+        end
+        checkzero(grid);
+    end
+    i = i+1;
+end
+
+AS=sort(AS);
+%%
+% AS= [AS;0];
+% %grid = zeros(rows, columns);
+% for i=1:size(actions,2)
+%     grid = zeros(rows, columns) %parto da grid vuota (Già in AS)
+%     j=1;
+%     while checkzero(grid)~=0 
+%         grid = action(j,grid,1) % mossa PLAYER 1 (Non è un AS)
+%         act_disp = vect_action(grid); %Check sul numero di mosse disponibili dell'avversario
+%         for a=1:size(act_disp,2) %ciclo tante volte quante sono le azioni disponibili
+%             if(act_disp(a)==1)
+%                 grid_AS = action(a,grid,2) %grid temporanea
+%                 id_AS = grid2id(grid_AS); %converto in id
+%                 if (ismember(id_AS, AS) == 0)
+%                     AS = [AS;id_AS]; %id non presente, quindi aggiungo
+%                 end
+%             end
+%         end
+%         grid = grid_AS % salvo l'ultimo AS inserito nel vettore per continuare a generare grid
+%         j = j+1;
+%      end
+% end
+% 
+% 
+
+
+
+
+
 
 
 %% Allocazione stati
@@ -44,14 +97,14 @@ end
 
 
 %% RIDUZIONE STATI
-for id=0:S-1
-    grid = id2grid(id);
-    if (checkone(grid) == checktwo(grid))
-        S_array=[S_array; id];
-    end
-end
-
-num_AS=length(S_array);
+% for id=0:S-1
+%     grid = id2grid(id);
+%     if (checkone(grid) == checktwo(grid))
+%         S_array=[S_array; id];
+%     end
+% end
+% 
+% num_AS=length(S_array);
 
 %% SAVE
 
@@ -149,15 +202,7 @@ end
 end
 
 %Calcolo la probabilità di fare una mossa
-function vect_action = vect_action(grid)
-vect_action =zeros(1,size(grid,2));
-top_grid = grid(1,:);
-for i= 1:size(grid,2)
-    if top_grid(i) == 0
-        vect_action(i) = 1;
-    end
-end
-end
+
 
 %
 %

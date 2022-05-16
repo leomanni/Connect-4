@@ -5,12 +5,12 @@
     COLUMNS = 7;
     grid = zeros(ROWS,COLUMNS);
     vect = zeros(1,ROWS*COLUMNS);
-    value = id; %vpa(id,30); %aumento sensibilità decimali
+    value = id; %vpa(id,30); %aumento sensibilità decimali   
     
     i = 1;
     while value ~= 0
         r = mod(value,3); %resto dell'operazione mod
-        value = (value - r)/3;
+        value =(value - r)/3;
         vect(i) = r;
         i = i + 1;
     end
