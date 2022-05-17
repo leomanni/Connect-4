@@ -12,26 +12,40 @@ grid = zeros(rows, columns);
 actions = 1:columns;
 AS = [0]; % array in cui vengono allocati tutti gli After State generati
 
+% grid=[0,0,0,0,0,0;
+%       0,0,0,0,2,1;
+%       0,0,0,0,1,0;
+%       0,0,0,1,0,0;
+%       0,2,1,0,0,0];
+% 
+% wincondition(grid);
+
+
 % Allocazione After-State
 tic
-simulazioni = 10;
+simulazioni = 10000;
 i=1;
 
 while i<=simulazioni
     grid = zeros(rows, columns); %parto da grid vuota (Già in AS)
 
     % inizio partita random
-    while checkzero(grid)~=0  
-        grid = random_action(grid,1);   % mossa PLAYER 1 random (Non è un AS)
-        grid = random_action(grid,2);   % mossa PLAYER 2 random (E' UN AS)
-        id_AS = grid2id(grid);  % converto in id
+    while (checkzero(grid)~=0) %|| wincondition(grid)==0)
+        if(wincondition(grid)==0)
+            grid = random_action(grid,1);   % mossa PLAYER 1 random (Non è un AS)
+            grid = random_action(grid,2);   % mossa PLAYER 2 random (E' UN AS)
+            id_AS = grid2id(grid);  % converto in id
 
-        % se id non presente in AS lo aggiungo
-        if (ismember(id_AS, AS) == 0)
-            AS = [AS;id_AS];    
+            % se id non presente in AS lo aggiungo
+            if (ismember(id_AS, AS) == 0)
+                AS = [AS;id_AS];
+            end
+
+            checkzero(grid);
+        else
+            break
         end
-
-        checkzero(grid);
+        
     end
 
     i = i+1;
