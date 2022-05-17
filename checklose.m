@@ -4,7 +4,7 @@
  lose = 0;
  
  %CHECK ORIZZONTALE
- for i=1:6
+ for i=1:size(grid,1)
      if (  grid(i,1)==2 && grid(i,2)==2 && grid(i,3)==2 && grid(i,4)==2 ...
         || grid(i,2)==2 && grid(i,3)==2 && grid(i,4)==2 && grid(i,5)==2 ...
         || grid(i,3)==2 && grid(i,4)==2 && grid(i,5)==2 && grid(i,6)==2 ...
@@ -15,7 +15,7 @@
  end
  
  %CHECK VERTICALE
- for j=1:7
+ for j=1:size(grid,1)
      if (  grid(1,j)==2 && grid(2,j)==2 && grid(3,j)==2 && grid(4,j)==2 ...
         || grid(2,j)==2 && grid(3,j)==2 && grid(4,j)==2 && grid(5,j)==2 ...
         || grid(3,j)==2 && grid(4,j)==2 && grid(5,j)==2 && grid(6,j)==2 )
