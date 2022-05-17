@@ -11,13 +11,11 @@ columns = 6;
 
 grid = zeros(rows, columns);
 actions = 1:columns;
-S = 0;
 AS= [0];
 
-%cleT=cat(3); %matrice 3D che contiente le corrispondenze grid indice(indice inserimento)
-%%
+
 tic
-simulazioni = 10;
+simulazioni = 1e3;
 
 i=1;
 while i<=simulazioni
@@ -38,7 +36,7 @@ end
 
 AS=sort(AS);
 toc
-%%
+
 save data.mat AS
 
 %%
@@ -53,14 +51,14 @@ for s = 1:num_AS    % indice stato di partenza s
     for a = 1:length(actions)   % scelta dell'azione a
         
         grid = id2grid(AS(s));
-        grid = action(grid,a,1);
+        grid = action(a,grid,1);
         % questo perché il find cicla per colonne
-        empty_index = find(transpose(grid) == 0);
+        free_actions = free_id(vect_action(grid));
         probAS = prob_nextState(grid);
         
-        for i=1:length(empty_index)
+        for i=1:length(free_actions)            
             grid_temp = grid;
-            grid_temp = action(grid_temp,empty_index(i),2);
+            grid_temp = action(free_actions(i),grid_temp,2);
             id = grid2id(grid_temp);
             index_id = find(AS == id);
             P(s,index_id,a) = probAS;
@@ -73,6 +71,89 @@ end
 
 
 
+
+%% matrice R
+
+R = zeros(num_AS+1, length(actions));
+
+victory_reward = 1;
+draw_reward = -1;
+lose_reward = -1;
+fail_reward = -1000;
+
+% time_penalty_reward = 0;
+
+for s = 1:num_AS    % indice stato di partenza s
+    
+    for a = 1:length(actions)    % scelta dell'azione a
+        
+        grid = id2grid(AS(s));
+        
+        
+        % converti IL CONTENUTO di grid in vettore di azioni libere tra 1:6
+        vect=vect_action(grid);
+        
+        
+        % check sulla posizione in cui vorrei giocare
+        prev = grid_temp(1,a);
+                
+        
+        % se sfora la colonna
+        if (vect(a) == 0)
+            R(s,a) = fail_reward;
+            
+            % se libero
+        elseif vect(a) == 1
+            grid = action(a,grid,1);
+            
+            ret = checkwin(grid);
+            
+            
+            if ret == 1
+                % se vince
+                
+                R(s,a) = victory_reward;
+                
+            elseif ret == -1
+                
+                % se pareggia
+                
+                R(s,a) = draw_reward;
+                
+            else
+                % se il gioco continua e l'avversario gioca
+                % if ret == 0
+                
+                free_index = free_id(vect);
+                fi_size = length(free_index);
+                p_lose = 1/fi_size;
+                rsa_array =zeros(fi_size,1);
+                
+                
+                for i = 1:fi_size
+                    
+                    temp_grid = action(free_index(i),grid,2);
+                    % emp ret dipende dall'implementazione di checkwni/lose
+                    temp_ret = checklose(temp_grid);
+                    
+                    if temp_ret == -2
+                        rsa = lose_reward;
+                        
+                    else
+                        rsa = 0;
+                    end
+                    rsa_array(i) = rsa;
+                    
+                end
+                % il reward sarà la media
+                
+                R(s,a) = mean(rsa_array);
+                
+                
+            end
+        end
+    end
+end
 
 
 
