@@ -14,7 +14,7 @@ AS = [0]; % array in cui vengono allocati tutti gli After State generati
 
 % Allocazione After-State
 tic
-simulazioni = 1e3;
+simulazioni = 10;
 i=1;
 
 while i<=simulazioni
@@ -42,6 +42,17 @@ AS=sort(AS);
 toc
 
 save data.mat AS
+
+%prove grafica
+
+% grid=id2grid(AS(90));
+% plotgame(grid)
+% ax = gca;
+% %pause(1)
+% hold on
+% grid=id2grid(AS(91));
+% plotgame(grid)
+% hold off
 
 %% MATRICE P di trasizione
 
