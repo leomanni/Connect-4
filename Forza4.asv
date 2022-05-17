@@ -17,15 +17,15 @@ AS= [0];
 %cleT=cat(3); %matrice 3D che contiente le corrispondenze grid indice(indice inserimento)
 %%
 tic
-simulazioni = 10;
+simulazioni = 10e2;
 
 i=1;
 while i<=simulazioni
-    grid = zeros(rows, columns); %parto da grid vuota (Già in AS)
+    grid = zeros(rows, columns); %parto da grid vuota (GiÃ  in AS)
 
     while checkzero(grid)~=0 %INIZIO PARTITA RANDOM
         %a=randi(size(actions,2)); %mossa random
-        grid = random_action(grid,1); % mossa PLAYER 1 random (Non è un AS)
+        grid = random_action(grid,1); % mossa PLAYER 1 random (Non Ã¨ un AS)
         grid = random_action(grid,2); % mossa PLAYER 2 random (E' UN AS)
         id_AS = grid2id(grid); %converto in id
         if (ismember(id_AS, AS) == 0)
@@ -44,25 +44,24 @@ save data.mat AS
 %%
 num_AS=length(AS);
 
-
 % MATRICE P
-P = zeros(num_AS+1, num_AS+1 , length(actions));
+P = zeros(num_AS+1, num_AS+1 , actions);
 
 for s = 1:num_AS    % indice stato di partenza s
     
-    for a = 1:length(actions)   % scelta dell'azione a
+    for a = 1:a0    % scelta dell'azione a
         
-        grid = id2grid(AS(s));
-        grid = action(grid,a,1);
-        % questo perché il find cicla per colonne
+        grid = state2board(vS(s));
+        grid = azione_value(grid,a,1);
+        % questo perchÃ© il find cicla per colonne
         empty_index = find(transpose(grid) == 0);
         probAS = prob_nextState(grid);
         
         for i=1:length(empty_index)
-            grid_temp = grid;
-            grid_temp = action(grid_temp,empty_index(i),2);
-            id = grid2id(grid_temp);
-            index_id = find(AS == id);
+            grid_ = grid;
+            grid_ = azione_value(grid_,empty_index(i),2);
+            id = board2state(grid_);
+            index_id = find(vS == id);
             P(s,index_id,a) = probAS;
         end
         
@@ -80,10 +79,10 @@ end
 % AS= [AS;0];
 % %grid = zeros(rows, columns);
 % for i=1:size(actions,2)
-%     grid = zeros(rows, columns) %parto da grid vuota (Già in AS)
+%     grid = zeros(rows, columns) %parto da grid vuota (GiÃ  in AS)
 %     j=1;
 %     while checkzero(grid)~=0 
-%         grid = action(j,grid,1) % mossa PLAYER 1 (Non è un AS)
+%         grid = action(j,grid,1) % mossa PLAYER 1 (Non Ã¨ un AS)
 %         act_disp = vect_action(grid); %Check sul numero di mosse disponibili dell'avversario
 %         for a=1:size(act_disp,2) %ciclo tante volte quante sono le azioni disponibili
 %             if(act_disp(a)==1)
@@ -118,7 +117,7 @@ end
 %     grid_1 = id2grid(S_array(i));
 % 
 %     for j = 1:7
-%         % controllo sulla possibilità di giocare mossa j
+%         % controllo sulla possibilitÃ  di giocare mossa j
 %         grid_2 = action(j,grid_1,2);
 %         id_temp = grid2id(grid_2);
 %         if find(S_array = id) == 0
@@ -194,7 +193,7 @@ for i=1:size(grid,1)
 end
 end
 
-%Calcolo la probabilità di fare una mossa
+%Calcolo la probabilitÃ  di fare una mossa
 
 
 %

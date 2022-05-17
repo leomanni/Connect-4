@@ -1,8 +1,8 @@
 % %Da indice a grid
 
  function grid = id2grid(id)
-    ROWS = 6;
-    COLUMNS = 7;
+    ROWS = 5;
+    COLUMNS = 6;
     grid = zeros(ROWS,COLUMNS);
     vect = zeros(1,ROWS*COLUMNS);
     value = id; %vpa(id,30); %aumento sensibilità decimali   
