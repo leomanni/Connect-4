@@ -1,3 +1,5 @@
+% Funzione per la plot del Connect-4
+
 function  plotgame(grid)
 grid=flipud(grid); % flippo up-down per questioni di grafica
 figure('Units','normalized','Position',[.2 .2 .6 .6], ...

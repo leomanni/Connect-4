@@ -10,20 +10,13 @@ rows = 5;
 columns = 6;
 grid = zeros(rows, columns);
 actions = 1:columns;
-AS = [0]; % array in cui vengono allocati tutti gli After State generati
 
-% grid=[0,0,0,0,0,0;
-%       0,0,0,0,2,1;
-%       0,0,0,0,1,0;
-%       0,0,0,1,0,0;
-%       0,2,1,0,0,0];
-% 
-% wincondition(grid);
+AS = [0]; % array in cui vengono allocati tutti gli After State generati
 
 
 % Allocazione After-State
 tic
-simulazioni = 10000;
+simulazioni = 1000;
 i=1;
 
 while i<=simulazioni
@@ -122,41 +115,44 @@ for s = 1:num_AS
         % se libero
         elseif vect(a) == 1
             grid = action(a,grid,1);
-            ret = checkwin(grid);
+            ret = wincondition(grid);
 
             % se vince
             if ret == 1
                 R(s,a) = victory_reward;
 
             % se pareggia   
-            elseif ret == -1
+            elseif (ret == 0 && checkzero(grid)==0)
                 R(s,a) = draw_reward;
 
             % se il gioco continua e l'avversario gioca    
             else
-                free_index = free_id(vect);
-                fi_size = length(free_index);
-                p_lose = 1/fi_size;
-                rsa_array =zeros(fi_size,1);
+                free_index = free_id(vect); % check sulle mosse ancora disponibili
+                fi_size = length(free_index); 
+                p_lose = 1/fi_size; % probabilità di sconfitta
+                rsa_array =zeros(fi_size,1); % array dei possibili rewards
                 
-                
+                % cosa succede quando l'avversario effettua la prossima
+                % mossa?
                 for i = 1:fi_size
                     
-                    temp_grid = action(free_index(i),grid,2);
-                    % emp ret dipende dall'implementazione di checkwni/lose
-                    temp_ret = checklose(temp_grid);
+                    temp_grid = action(free_index(i),grid,2); % costruisco un grid temporanea per valutare ogni situazione possibile
+                    temp_ret = wincondition(temp_grid);
                     
-                    if temp_ret == -2
+                    % l'avversario vince
+                    if temp_ret == 2
                         rsa = lose_reward;
                         
+                    % il gioco continua   
                     else
                         rsa = 0;
                     end
+
                     rsa_array(i) = rsa;
                     
                 end
+
                 % il reward sarà la media
-                
                 R(s,a) = mean(rsa_array);
                 
                 
@@ -182,6 +178,9 @@ for i=1:size(grid,1)
     end
 end
 end
+
+
+% Si possono cancellare 
 
 %Conto il numero di 1 in griglia
 function one= checkone(grid)
