@@ -11,7 +11,7 @@ columns = 6;
 grid = zeros(rows, columns);
 actions = 1:columns;
 
-AS = [0]; % array in cui vengono allocati tutti gli After State generati
+AS = 0; % array in cui vengono allocati tutti gli After State generati
 
 
 % Allocazione After-State
@@ -48,7 +48,7 @@ AS=sort(AS);
 
 toc
 
-save data.mat AS
+% save data.mat AS P R
 
 %prove grafica
 
@@ -161,6 +161,9 @@ for s = 1:num_AS
     end
 end
 
+%%
+
+save data.mat AS P R -v7.3
 
 
 
