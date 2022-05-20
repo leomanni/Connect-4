@@ -13,6 +13,23 @@ actions = 1:columns;
 
 AS = 0; % array in cui vengono allocati tutti gli After State generati
 AS_temp = 0;
+%%
+% simulazioni = 6;
+% i=1;
+% g=0;
+% while i<simulazioni
+%     while i<4
+%     if i<3
+%         g=g+1
+%     else
+%             break
+%     end
+%     i=i+1;
+%     end
+%     i=i+1;
+% 
+% end
+
 
 %%
 % Allocazione After-State che portano alla vittoria/sconfitta
@@ -21,12 +38,12 @@ simulazioni = 3000;
 i=1;
 
 while i<= simulazioni
-    grid = zeros(rows, columns); %parto da grid vuota (Già in AS)
+    grid = zeros(rows, columns); %parto da grid vuota (GiÃ  in AS)
 
     AS_temp = [];
     % inizio partita random
     while (wincondition(grid)==0)
-            grid = random_action(grid,1);   % mossa PLAYER 1 random (Non è un AS)
+            grid = random_action(grid,1);   % mossa PLAYER 1 random (Non Ã¨ un AS)
             grid = random_action(grid,2);   % mossa PLAYER 2 random (E' UN AS)
             id_AS = grid2id(grid);  % converto in id
             
@@ -44,45 +61,45 @@ while i<= simulazioni
     i = i+1;
 end
 toc
-
+%%
 AS=unique(AS);
 
 
 
 %%
 % Allocazione After-State
-% tic
-% simulazioni = 3000;
-% i=1;
-% 
-% while i<=simulazioni
-%     grid = zeros(rows, columns); %parto da grid vuota (Già in AS)
-% 
-%     % inizio partita random
-%     while (checkzero(grid)~=0) %|| wincondition(grid)==0)
-%         if(wincondition(grid)==0)
-%             grid = random_action(grid,1);   % mossa PLAYER 1 random (Non è un AS)
-%             grid = random_action(grid,2);   % mossa PLAYER 2 random (E' UN AS)
-%             id_AS = grid2id(grid);  % converto in id
-% 
-%             % se id non presente in AS lo aggiungo
-%             if (ismember(id_AS, AS) == 0)
-%                 AS = [AS;id_AS];
-%             end
-% 
-%             checkzero(grid);
-%         else
-%             break
-%         end
-%         
-%     end
-% 
-%     i = i+1;
-% end
-% 
-% AS=sort(AS);
-% 
-% toc
+tic
+simulazioni = 3000;
+i=1;
+
+while i<=simulazioni
+    grid = zeros(rows, columns); %parto da grid vuota (GiÃ  in AS)
+
+    % inizio partita random
+    while (checkzero(grid)~=0) %|| wincondition(grid)==0)
+        if(wincondition(grid)==0)
+            grid = random_action(grid,1);   % mossa PLAYER 1 random (Non Ã¨ un AS)
+            grid = random_action(grid,2);   % mossa PLAYER 2 random (E' UN AS)
+            id_AS = grid2id(grid);  % converto in id
+
+            % se id non presente in AS lo aggiungo
+            if (ismember(id_AS, AS) == 0)
+                AS = [AS;id_AS];
+            end
+
+            checkzero(grid);
+        else
+            break
+        end
+        
+    end
+
+    i = i+1;
+end
+
+AS=sort(AS);
+
+toc
 
 %%
 % save data.mat AS P R
@@ -112,7 +129,7 @@ for s = 1:num_AS
         grid = id2grid(AS(s));
         grid = action(a,grid,1);  % gioco la mossa Player 1
         free_actions = free_id(vect_action(grid));  % vettore delle mosse libere
-        probAS = prob_nextState(grid);  % probabilità di evolvere in un nuovo stato
+        probAS = prob_nextState(grid);  % probabilitÃ  di evolvere in un nuovo stato
 
         % ciclo su ogni azione possibile
         for i=1:length(free_actions)            
@@ -166,7 +183,7 @@ for s = 1:num_AS
             else
                 free_index = free_id(vect); % check sulle mosse ancora disponibili
                 fi_size = length(free_index); 
-                p_lose = 1/fi_size; % probabilità di sconfitta
+                p_lose = 1/fi_size; % probabilitÃ  di sconfitta
                 rsa_array =zeros(fi_size,1); % array dei possibili rewards
                 
                 % cosa succede quando l'avversario effettua la prossima
@@ -189,7 +206,7 @@ for s = 1:num_AS
                     
                 end
 
-                % il reward sarà la media
+                % il reward sarÃ  la media
                 R(s,a) = mean(rsa_array);
                 
                 
