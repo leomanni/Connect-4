@@ -17,7 +17,7 @@ AS_temp = 0;
 %%
 % Allocazione After-State che portano alla vittoria/sconfitta
 tic
-simulazioni = 3000;
+simulazioni = 100;
 i=1;
 
 while i<= simulazioni
@@ -84,27 +84,14 @@ AS=unique(AS);
 % 
 % toc
 
-%%
-% save data.mat AS P R
-
-%prove grafica
-
-% grid=id2grid(AS(90));
-% plotgame(grid)
-% ax = gca;
-% %pause(1)
-% hold on
-% grid=id2grid(AS(91));
-% plotgame(grid)
-% hold off
 
 %% MATRICE P di trasizione
-
 num_AS=length(AS);
+P1= zeros(num_AS+1, num_AS+1); % , length(actions));
+P2=P1; P3=P2; P4=P3; P5=P4; P6=P5; %matrice di transizione della mossa i-esima
 
-P = zeros(num_AS+1, num_AS+1 , length(actions));
 
-% ciclo su tutti gli AS generati
+% % ciclo su tutti gli AS generati
 for s = 1:num_AS 
 
     % ciclo su ogni azione
@@ -120,12 +107,59 @@ for s = 1:num_AS
             grid_temp = action(free_actions(i),grid_temp,2);    % Player 2 gioca mossa tra le possibili
             id = grid2id(grid_temp);
             index_id = find(AS == id);  % per avere stessa corrispondenza tra AS e P
-            P(s,index_id,a) = probAS;   % popolo la matice P
+            
+            switch length(free_actions)
+
+                case 1
+                    P1(s,index_id) = probAS;   % popolo la matice P1
+                case 2
+                    P2(s,index_id) = probAS;   % popolo la matice P2
+                case 3
+                    P3(s,index_id) = probAS;   % popolo la matice P3
+                case 4
+                    P4(s,index_id) = probAS;   % popolo la matice P4
+                case 5
+                    P5(s,index_id) = probAS;   % popolo la matice P5
+                case 6
+                    P6(s,index_id) = probAS;   % popolo la matice P6
+            end
+
         end  
 
     end
     
 end
+
+
+
+
+
+% num_AS=length(AS);
+% 
+% P = zeros(num_AS+1, num_AS+1 , length(actions));
+% 
+% % ciclo su tutti gli AS generati
+% for s = 1:num_AS 
+% 
+%     % ciclo su ogni azione
+%     for a = 1:length(actions)   
+%         grid = id2grid(AS(s));
+%         grid = action(a,grid,1);  % gioco la mossa Player 1
+%         free_actions = free_id(vect_action(grid));  % vettore delle mosse libere
+%         probAS = prob_nextState(grid);  % probabilità di evolvere in un nuovo stato
+% 
+%         % ciclo su ogni azione possibile
+%         for i=1:length(free_actions)            
+%             grid_temp = grid;
+%             grid_temp = action(free_actions(i),grid_temp,2);    % Player 2 gioca mossa tra le possibili
+%             id = grid2id(grid_temp);
+%             index_id = find(AS == id);  % per avere stessa corrispondenza tra AS e P
+%             P(s,index_id,a) = probAS;   % popolo la matice P
+%         end  
+% 
+%     end
+%     
+% end
 
 %% matrice R
 
@@ -200,7 +234,7 @@ end
 
 %%
 
-save data.mat AS P R -v7.3
+save data.mat AS P1 P2 P3 P4 P5 P6 R -v7.3
 
 
 
