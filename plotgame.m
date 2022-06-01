@@ -8,8 +8,8 @@ grid=flipud(grid); % flippo up-down per questioni di grafica
 %     'Color','b','LineWidth',1,'Box','on');
 % set(gca, 'XTick',[],'YTick',[],'XLim',[0,140],'YLim',[0,130]);
 hold on;
-for row = 1:5
-    for col = 1:6
+for row = 1:6
+    for col = 1:7
         if(grid(row,col)==1)
             grid(row,col) = plot( col*20,row*20, 'wo','MarkerSize',30,...
                 'LineWidth',.5,'MarkerFaceColor','y', ...

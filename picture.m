@@ -9,7 +9,7 @@ if mod(i,n) == 0
     if (wincondition(grid)==1)
         disp("GIALLO VINCE")
     elseif (wincondition(grid)==2)
-        disp("GIALLO PERDE")
+        disp("ROSSO VINCE, COMPLIMENTI!")
     end
 end
 

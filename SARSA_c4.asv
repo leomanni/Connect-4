@@ -12,7 +12,7 @@ actions = 1:columns;
 alpha = 0.5;
 epsilon = 0.5;
 gamma = 1;
-num_episodes = 10000;
+num_episodes = 1000;
 % n episodi giocati con grafica
 n = 0;
 
@@ -24,7 +24,6 @@ visited_grids(1,1) = grid2id(grid);
 
 vittorie = 0;
 
-tic
 for i = 1 : num_episodes
 
 
@@ -134,7 +133,6 @@ for i = 1 : num_episodes
     end
 
 end
-toc
 
 %% GAME
 
@@ -162,13 +160,11 @@ while ~is_terminal
     ret_check = check_valid(A);
     if ret_check == 0
         R = -100*rows*columns;
-        msgbox("Non superare la griglia! Hai provato mossa " + A);
-        disp("Episodio terminato")
+        disp("Non superare la griglia! Hai provato mossa ");
         % Il valore Q(S',A') è posto a 0
         Q(S,A) = Q(S,A) + alpha*(R - Q(S,A));
 
         is_terminal = true;
-        break;
     end
 
     grid = action(A,grid,1);
