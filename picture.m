@@ -5,7 +5,7 @@ if mod(i,n) == 0
     hold on
     
     plotgame(grid);
-    pause(1)
+    pause(0.7)
     if (wincondition(grid)==1)
         disp("GIALLO VINCE")
     elseif (wincondition(grid)==2)

@@ -12,17 +12,20 @@ actions = 1:columns;
 alpha = 0.5;
 epsilon = 0.5;
 gamma = 1;
-num_episodes = 10000;
+num_episodes = 1000;
 % n episodi giocati con grafica
 n = 0;
 
 Q = randi(8,[1,columns]);   %8 da modificare?
+
 is_terminal = false;
 visited_grids = zeros(1,2);
 
 visited_grids(1,1) = grid2id(grid);
 
 vittorie = 0;
+
+load data.mat
 
 tic
 for i = 1 : num_episodes
@@ -136,7 +139,10 @@ for i = 1 : num_episodes
 end
 toc
 
+save "data.mat Q visited_grids
+
 %% GAME
+
 
 
 figure('Units','normalized','Position',[.2 .2 .6 .6], ...
@@ -156,7 +162,7 @@ picture(grid,i,n);
 while ~is_terminal
 
     % muove l'agente
-    A = eps_greedy(Q(S,:),epsilon);
+    A = eps_greedy(Q(S,:),0);
 
     check_valid = vect_action(grid);
     ret_check = check_valid(A);
@@ -216,7 +222,7 @@ while ~is_terminal
 
 
     % scelta A' epsilon greedy
-    A_1 = eps_greedy(Q(S_1,:),epsilon);
+    A_1 = eps_greedy(Q(S_1,:),0);
 
     % aggiorno Q(S,A) = Q(S,A) + alpha(R+gamma*Q(S',A') - Q(S,A))
 
@@ -229,6 +235,7 @@ while ~is_terminal
     if check_value(grid,0) == 0
         is_terminal = true;
     end
+
 end
 
 
