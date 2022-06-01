@@ -25,7 +25,7 @@ visited_grids(1,1) = grid2id(grid);
 
 vittorie = 0;
 
-load data.mat
+% load data.mat
 
 tic
 for i = 1 : num_episodes
@@ -139,7 +139,7 @@ for i = 1 : num_episodes
 end
 toc
 
-save "data.mat Q visited_grids
+save data.mat Q visited_grids
 
 %% GAME
 
