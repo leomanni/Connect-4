@@ -13,8 +13,6 @@ alpha = 0.5;
 epsilon = 0.2;
 gamma = 1;
 num_episodes = 1000;
-% n episodi giocati con grafica
-n = 300;
 
 Q = randi(8,[1,columns]);   %8 da modificare?
 is_terminal = false;
@@ -22,31 +20,27 @@ visited_grids = zeros(1,1);
 
 visited_grids(1) = grid2id(grid);
 
-% setup plot
-figure('Units','normalized','Position',[.2 .2 .6 .6], ...
-    'Name','     * CONNECT - 4 *','Color','w');
-axes('Units','normalized','Position',[.1 0 .8 .8], ...
-    'Color','b','LineWidth',1,'Box','on');
-set(gca, 'XTick',[],'YTick',[],'XLim',[0,140],'YLim',[0,130]);
-
-
 for i = 1 : num_episodes
     
-    
+    if mod(i,100) == 0
+        picture = plotgame(grid);
+    else 
+        picture = 0;
+    end
 
     % initialize S = 1 (indicizzazione)
     S = 1;
     R = 0;
     is_terminal = false;
+    picture;
     grid = id2grid(visited_grids(S));
-    picture(grid,i,n);
- 
+
+    
+
     while ~is_terminal
         % scelta A epsilon greedy, guardando a Q(S',A)
         A = eps_greedy(Q(S,:),epsilon);
         grid = action(A,grid,1);
-        picture(grid,i,n);
-
         % azione avversario
         
 
@@ -61,7 +55,6 @@ for i = 1 : num_episodes
                 is_terminal = true;
             else
                 grid = random_action(grid,2);
-                picture(grid,i,n);
             end
 
             id_grid = grid2id(grid);

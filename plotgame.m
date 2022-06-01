@@ -2,11 +2,11 @@
 
 function  plotgame(grid)
 grid=flipud(grid); % flippo up-down per questioni di grafica
-figure('Units','normalized','Position',[.2 .2 .6 .6], ...
-    'Name','     * CONNECT - 4 *','Color','w');
-axes('Units','normalized','Position',[.1 0 .8 .8], ...
-    'Color','b','LineWidth',1,'Box','on');
-set(gca, 'XTick',[],'YTick',[],'XLim',[0,140],'YLim',[0,130]);
+% figure('Units','normalized','Position',[.2 .2 .6 .6], ...
+%     'Name','     * CONNECT - 4 *','Color','w');
+% axes('Units','normalized','Position',[.1 0 .8 .8], ...
+%     'Color','b','LineWidth',1,'Box','on');
+% set(gca, 'XTick',[],'YTick',[],'XLim',[0,140],'YLim',[0,130]);
 hold on;
 for row = 1:5
     for col = 1:6
