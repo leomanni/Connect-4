@@ -149,11 +149,11 @@ for i = 1 : num_episodes
     if (mod(i,step) == 0)
         media_tot = (vittorie/i)*100;
         array_vict_tot = [array_vict_tot, media_tot];
-        disp("% vittorie totale = " + media_tot);
+        disp("% vittorie totale = " + media_tot +" %");
         
         media_step = (vittorie_step/step)*100;
         array_vict_step = [array_vict_step, media_step];
-        %disp("% vittorie step = " + media_step);
+        disp("% vittorie step = " + media_step +" %");
         vittorie_step = 0;
     end
 
