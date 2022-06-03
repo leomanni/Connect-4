@@ -7,9 +7,9 @@ if mod(i,n) == 0
     plotgame(grid);
     pause(0.7)
     if (wincondition(grid)==1)
-        disp("GIALLO VINCE")
+        msgbox("GIALLO VINCE");
     elseif (wincondition(grid)==2)
-        disp("ROSSO VINCE, COMPLIMENTI!")
+       msgbox("ROSSO VINCE, COMPLIMENTI!");
     end
 end
 

@@ -208,8 +208,9 @@ while ~is_terminal
 
         % ripete finché non inserisce azione valida
         while ~valid
-            prompt = "Seleziona mossa valida: ";
-            a = input(prompt);
+            answer=inputdlg('Seleziona mossa valida:','Input',[1 35]);
+            a = str2double(answer{1});
+
             valid = true;
         end
         grid = action(a,grid,2);
