@@ -2,12 +2,19 @@ function a = eps_greedy(Q, epsilon,grid)
 
 % mossa random
 if rand < epsilon
-    
+    %"random"
     vect_free = free_id(vect_action(grid)); %vettore delle mosse disponibili
+
+
     if length(vect_free)>1
     	a = randsample(vect_free,1); %se il vettore diventa uno scalare (nel caso rimane solo una mossa disbonibile) si trasforma in un randi
     else
+        if isempty(vect_free)
+            a=1; %serve per gestire il bug
+        else
+        % QUANDO LA GRID è FULL CRUSHA
         a = vect_free; %scelgo l'unica mossa disponibile
+        end
     end
     
 % mossa epsilon-greedy

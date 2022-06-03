@@ -10,8 +10,8 @@ grid = zeros(rows, columns);
 actions = 1:columns;
 
 alpha = 0.9; 
-%epsilon = 0.6; % Ambiente STATICO -> epsilon DECRESCENTE
-epsilon = 0.0;
+epsilon = 0.6; % Ambiente STATICO -> epsilon DECRESCENTE
+%epsilon = 0.1;
 gamma = 1;
 num_episodes = 1000;
 % n episodi giocati con grafica
@@ -27,12 +27,11 @@ visited_grids(1,1) = grid2id(grid);
 vittorie = 0;
 plot_vict = [];
 %%
-load data.mat
+%load data.mat
 
 %%
 tic
 for i = 1 : num_episodes
-
 
 
     % initialize S = 1 (indicizzazione)
@@ -121,6 +120,7 @@ for i = 1 : num_episodes
 
         % scelta A' epsilon greedy
         A_1 = eps_greedy(Q(S_1,:),epsilon,grid);
+        vect_free = free_id(vect_action(grid));
 
         % aggiorno Q(S,A) = Q(S,A) + alpha(R+gamma*Q(S',A') - Q(S,A))
 
@@ -131,7 +131,6 @@ for i = 1 : num_episodes
         A = A_1;
         % check S is_terminal
         if check_value(grid,0) == 0
-
             epsilon = epsilon - 1/1e6;
             if epsilon <= 0.1
                 epsilon = 0.1;
@@ -140,7 +139,7 @@ for i = 1 : num_episodes
 %             if alpha <= 0.1
 %                 alpha = 0.1;
 %             end
-
+            Q(S,:)=0; % reimposto il valore dello stato terminale a 0 per sicurezza
             is_terminal = true;
         end
     end
@@ -251,6 +250,7 @@ while ~is_terminal
     A = A_1;
     % check S is_terminal
     if check_value(grid,0) == 0
+        Q(S,:)=0;
         is_terminal = true;
     end
 
