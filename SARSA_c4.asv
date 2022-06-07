@@ -10,10 +10,10 @@ grid = zeros(rows, columns);
 actions = 1:columns;
 
 alpha = 0.9;
-epsilon = 0.6; % Ambiente STATICO -> epsilon DECRESCENTE
-%epsilon = 0.1;
+%epsilon = 0.6; % Ambiente STATICO -> epsilon DECRESCENTE
+epsilon = 0.1;
 gamma = 1;
-num_episodes = 1000;
+num_episodes = 100000;
 % n episodi giocati con grafica
 n = 0;
 
@@ -26,7 +26,7 @@ visited_grids(1,1) = grid2id(grid);
 
 vittorie = 0;
 vittorie_step = 0;
-step = 10; % ogni step visualizzo la % di vittoria
+step = 5000; % ogni step visualizzo la % di vittoria
 array_vict_tot = [];
 array_vict_step = [];
 
@@ -39,7 +39,7 @@ load data.mat
 
 %%
 tic
-for i = 1 : num_episodes
+for e = 1 : num_episodes
 
 
     % initialize S = 1 (indicizzazione)
@@ -48,7 +48,7 @@ for i = 1 : num_episodes
     R = 0;
     is_terminal = false;
     grid = id2grid(visited_grids(S,1));
-    picture(grid,i,n);
+    picture(grid,e,n);
 
     while ~is_terminal
         % scelta A epsilon greedy, guardando a Q(S',A)
@@ -59,6 +59,11 @@ for i = 1 : num_episodes
             grid_temp = grid;
             grid_temp = action(U_valid_temp_1(i),grid_temp,1);
             U_valid_temp_2 = free_id(vect_action(grid_temp));
+            if wincondition(grid_temp)== 1
+                Q(S,i) = win_reward;
+            break;
+            end
+
             for j = 1:length(U_valid_temp_2)
                 grid_temp_oppo = grid_temp;
                 grid_temp_oppo = action(U_valid_temp_2(j),grid_temp_oppo,2);
@@ -86,7 +91,7 @@ for i = 1 : num_episodes
         end
 
         grid = action(A,grid,1);
-        picture(grid,i,n);
+        picture(grid,e,n);
 
         % azione avversario
 
@@ -171,8 +176,8 @@ for i = 1 : num_episodes
     end
 
     % percentuale vittorie
-    if (mod(i,step) == 0)
-        media_tot = (vittorie/i)*100;
+    if (mod(e,step) == 0)
+        media_tot = (vittorie/e)*100;
         array_vict_tot = [array_vict_tot, media_tot];
         disp("% vittorie totale = " + media_tot);
 
@@ -186,7 +191,7 @@ end
 toc
 
 %%
-%save data.mat Q visited_grids plot_vict
+save data.mat Q visited_grids array_vict_tot array_vict_step
 
 %% GAME
 
@@ -203,8 +208,8 @@ R = 0;
 is_terminal = false;
 grid = id2grid(visited_grids(S,1));
 n = 1;
-i = 1;
-picture(grid,i,n);
+e = 1;
+picture(grid,e,n);
 
 while ~is_terminal
 
@@ -217,6 +222,11 @@ while ~is_terminal
         grid_temp = grid;
         grid_temp = action(U_valid_temp_1(i),grid_temp,1);
         U_valid_temp_2 = free_id(vect_action(grid_temp));
+        if wincondition(grid_temp)== 1
+            Q(S,i) = win_reward;
+            break;
+        end
+        
         for j = 1:length(U_valid_temp_2)
             grid_temp_oppo = grid_temp;
             grid_temp_oppo = action(U_valid_temp_2(j),grid_temp_oppo,2);
@@ -244,7 +254,7 @@ while ~is_terminal
     end
 
     grid = action(A,grid,1);
-    picture(grid,i,n);
+    picture(grid,e,n);
 
     % check vittoria agente
     winner = wincondition(grid);
@@ -263,7 +273,7 @@ while ~is_terminal
             valid = true;
         end
         grid = action(a,grid,2);
-        picture(grid,i,n);
+        picture(grid,e,n);
     end
 
     id_grid = grid2id(grid);
