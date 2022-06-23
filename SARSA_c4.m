@@ -18,7 +18,7 @@ alpha = 0.9;
 epsilon = 0.1; % Utilizzare ad apprendimento avanzanto
 gamma = 1;
 Q = randi(8,[1,columns]);  % Q iniziale random
-num_episodes = 1000;
+num_episodes = 1000000;
 
 n=0; % n° episodi giocati con grafica durante l'apprendimento
 is_terminal = false;
